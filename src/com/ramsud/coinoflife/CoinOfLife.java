@@ -1,4 +1,4 @@
-package processing.test.coinoflife;
+package com.ramsud.coinoflife;
 
 import processing.core.*; 
 import processing.event.*; 
