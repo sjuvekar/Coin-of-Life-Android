@@ -12,8 +12,9 @@ import apwidgets.*;
 import java.util.ArrayList; 
 
 import com.google.ads.*;
+import com.google.ads.AdRequest.ErrorCode;
 
-public class CoinOfLife extends PApplet {
+public class CoinOfLife extends PApplet implements AdListener {
 
   /* @pjs preload="coin.png, button.png, active_button.png, gem.png, diamond.png, rock.png, logo.png, soundon.png, soundoff.png, 0.png, 1.png, 2.png, 3.png, 4.png, 5.png, 6.png, 7.png, 8.png, 9.png"; crisp="true"; */                 
 /* @pjs preload="play.wav, coin.wav"; */
@@ -27,6 +28,13 @@ public class CoinOfLife extends PApplet {
 
 
 		//add ads
+		//create interstatial
+		interstitial = new InterstitialAd(this, "ca-app-pub-2072064411205042/2928973617");
+		interstitial.setAdListener(this);
+		AdRequest newInterAdReq = new AdRequest();
+		interstitial.loadAd(newInterAdReq);
+
+
 
 		Window window = getWindow();
 
@@ -54,6 +62,7 @@ public class CoinOfLife extends PApplet {
 		//create handler and post the first callback
 	}
 
+private InterstitialAd interstitial;
 
 Player player;
 Drawer drawer;
@@ -2023,6 +2032,38 @@ public int min_grid_Y() {
 
 final int[] TUT_POS_X = {7, 7, 8, 9, 9, 9};
 final int[] TUT_POS_Y = {7, 6, 6, 6, 7, 8};
+
+@Override
+public void onDismissScreen(Ad arg0) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void onLeaveApplication(Ad arg0) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void onPresentScreen(Ad arg0) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void onReceiveAd(Ad ad) {
+	Log.e("OK", "Received ad");
+    if (ad == interstitial) {
+      interstitial.show();
+    }
+}
   
 
 
