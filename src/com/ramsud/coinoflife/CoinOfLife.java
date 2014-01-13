@@ -19,12 +19,17 @@ public class CoinOfLife extends PApplet implements AdListener {
   /* @pjs preload="coin.png, button.png, active_button.png, gem.png, diamond.png, rock.png, logo.png, soundon.png, soundoff.png, 0.png, 1.png, 2.png, 3.png, 4.png, 5.png, 6.png, 7.png, 8.png, 9.png"; crisp="true"; */                 
 /* @pjs preload="play.wav, coin.wav"; */
 /* @pjs font="data/Clock.ttf, data/Button.ttf"; crisp=true; */ 
-
+	/*
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 
+		//create interstatial
+		interstitial = new InterstitialAd(this, "ca-app-pub-2072064411205042/2928973617");
+		interstitial.setAdListener(this);
+		AdRequest newInterAdReq = new AdRequest();
+		interstitial.loadAd(newInterAdReq);
 
 
 		//add ads
@@ -33,8 +38,6 @@ public class CoinOfLife extends PApplet implements AdListener {
 		interstitial.setAdListener(this);
 		AdRequest newInterAdReq = new AdRequest();
 		interstitial.loadAd(newInterAdReq);
-
-
 
 		Window window = getWindow();
 
@@ -58,12 +61,22 @@ public class CoinOfLife extends PApplet implements AdListener {
 		adView.loadAd(newAdReq);
 
 		window.addContentView(adsLayout, lp2);
+		
 
-		//create handler and post the first callback
 	}
 
 private InterstitialAd interstitial;
 
+	@Override
+	  public void onReceiveAd(Ad ad) {
+	    Log.e("OK", "Received ad");
+	    if (ad == interstitial) {
+	      interstitial.show();
+	    }
+	  }
+	*/
+	private InterstitialAd interstitial;
+	
 Player player;
 Drawer drawer;
 TutDrawer tut_drawer;
@@ -143,6 +156,7 @@ public void setup() {
   player = new Player(a_width, c_width, a_height, c_height, max_grid_x, max_grid_y);
   drawer = new Drawer(player);
   tut_drawer = new TutDrawer(player);
+  
 }
 
 public void draw() {
@@ -267,6 +281,7 @@ public class Board {
   
   // Responds to undo press by user
   public void undo() {
+	if (last_X.size() == 0 || last_Y.size() == 0) return;
     int lx = last_X.get(0);
     int ly = last_Y.get(0);
     alive[lx][ly] = false;
@@ -277,7 +292,7 @@ public class Board {
   
   // Responds to reset pressed by user
   public void reset() {
-    for (int i = 0; i < max_grid_x; i++) {
+    for (int i = 0; i <= max_grid_x; i++) {
       for (int j = 0; j < max_grid_y; j++) {
         alive[i][j] = false;
         ever_alive[i][j] = false;
@@ -1637,7 +1652,7 @@ public class Player {
       state = NEXTLEVEL;
       G_TIMER = 0;
       //G_COIN_PLAYER.loop();
-    }  
+    }
     else {
       G_TIMER = G_TIMER + 1;
     }
@@ -1920,12 +1935,15 @@ public class TutDrawer {
     background(0);
     stroke(255);
 
+    int n_horizontal = a_width / c_width;
+    int n_vertical = a_height / c_height;
+    
     // Draw all the cells
-    for (int i = c_width; i < a_width - c_width; i += c_width) {
-      line(i, c_height, i, a_height - (int)(1.2f * c_height));
+    for (int i = 1; i < n_horizontal; i++) {
+      line(i * c_width, 2 * c_height, i * c_width, n_vertical * c_height);
     }
-    for (int i = c_height; i < a_height; i += c_height) {
-      line(c_width, i, a_width - (int)(3 * c_width / 2), i);
+    for (int i = 2; i <= n_vertical; i++) {
+      line(c_width, i * c_height, (n_horizontal - 1) * c_width, i * c_height);
     }
     
     // Red Squares
@@ -1939,7 +1957,7 @@ public class TutDrawer {
     boolean[][] alive = player.getAlive();
     boolean[][] ever_alive = player.getEverAlive();
     for (int i = 0; i < alive.length; i++) {
-      for (int j = 0; j < alive[i].length; j++) {
+      for (int j = 2; j < alive[i].length; j++) {
         if (ever_alive[i][j]) {
           pushStyle();
           fill(75, 75, 75);
@@ -2033,6 +2051,7 @@ public int min_grid_Y() {
 final int[] TUT_POS_X = {7, 7, 8, 9, 9, 9};
 final int[] TUT_POS_Y = {7, 6, 6, 6, 7, 8};
 
+/*
 @Override
 public void onDismissScreen(Ad arg0) {
 	// TODO Auto-generated method stub
@@ -2065,6 +2084,7 @@ public void onReceiveAd(Ad ad) {
     }
 }
   
+*/  
 
 
   //public int sketchWidth() { return 1240; }
